@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แบบทดสอบออนไลน์</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+</head>
+<body>
+    <div class="container">
+        <div id="intro-section" class="section active">
+            <div class="intro-content">
+                <div class="logos-container">
+                    <img src="Logo_1.png" alt="โลโก้หน่วยงาน" class="org-logo" id="logo-1" onerror="this.style.display='none'">
+                    <img src="Logo_2.png" alt="โลโก้ขวัญแก้ว" class="org-logo" id="logo-2" onerror="this.style.display='none'">
+                </div>
+                <h1 id="intro-title">แนวข้อสอบนักพัฒนากร</h1>
+                <div class="intro-info">
+                    <p><strong>สังกัด:</strong> <span id="intro-department">กรมพัฒนาชุมชน</span></p>
+                    <p><strong>โดย:</strong> <span id="intro-author">ขวัญแก้วงานวิชาการ</span></p>
+                </div>
+
+                <div class="participant-form">
+                    <label for="participant-name">ชื่อ-นามสกุล</label>
+                    <input id="participant-name" type="text" placeholder="กรอกชื่อ-นามสกุล" autocomplete="name">
+                </div>
+
+                <button onclick="startQuiz()" class="start-btn">เริ่มทำแบบทดสอบ</button>
+            </div>
+        </div>
+
+        <div id="loading" class="hidden">
+            <div class="spinner"></div>
+            <p>กำลังโหลดข้อสอบ...</p>
+        </div>
+
+        <div id="quiz-section" class="section hidden">
+            <div class="quiz-topbar">
+                <div class="quiz-header">
+                    <h1 id="quiz-title">📝 แบบทดสอบ</h1>
+                    <div class="progress">
+                        <span id="current-question">1</span> / <span id="total-questions">10</span>
+                    </div>
+                </div>
+
+                <div class="quiz-rightbar">
+                    <div class="logo-stack">
+                        <img src="Logo_1.png" alt="โลโก้หน่วยงาน" class="org-logo quiz-logo" id="quiz-logo-1" onerror="this.style.display='none'">
+                        <img src="Logo_2.png" alt="โลโก้ขวัญแก้ว" class="org-logo quiz-logo" id="quiz-logo-2" onerror="this.style.display='none'">
+                    </div>
+                    <div class="timer-box">
+                        <span class="timer-label">เวลาข้อปัจจุบัน</span>
+                        <span id="question-timer">01:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="question-container">
+                <h2 id="question-text">คำถามจะปรากฏที่นี่</h2>
+                <div id="options-container" class="options">
+                    <!-- ตัวเลือกจะถูกสร้างโดย JavaScript -->
+                </div>
+            </div>
+
+            <div class="quiz-footer">
+                <button id="prev-btn" onclick="previousQuestion()" disabled><span class="button-icon">←</span> ก่อนหน้า</button>
+                <button id="next-btn" onclick="nextQuestion()">ถัดไป <span class="button-icon">→</span></button>
+                <button id="submit-btn" onclick="submitQuiz()" class="hidden"><span class="button-icon">✓</span> ส่งคำตอบ</button>
+            </div>
+        </div>
+
+        <div id="result-section" class="section hidden">
+            <h1>📝 ผลลัพธ์</h1>
+            <div class="result-container">
+                <div class="participant-summary" id="participant-summary">ผู้เข้าทำ: -</div>
+                <div class="score-card">
+                    <div class="score">
+                        <span id="score">0</span> / <span id="total-score">0</span>
+                    </div>
+                    <p id="score-percentage">0%</p>
+                    <p id="score-message"></p>
+                </div>
+
+                <div class="result-grid">
+                    <div class="result-stat correct-stat">
+                        <span class="stat-label">ตอบถูก</span>
+                        <span id="correct-count" class="stat-value">0</span>
+                    </div>
+                    <div class="result-stat incorrect-stat">
+                        <span class="stat-label">ตอบผิด</span>
+                        <span id="incorrect-count" class="stat-value">0</span>
+                    </div>
+                    <div class="result-stat unanswered-stat">
+                        <span class="stat-label">ยังไม่ได้ตอบ</span>
+                        <span id="unanswered-count" class="stat-value">0</span>
+                    </div>
+                </div>
+
+                <div id="result-summary" class="result-summary"></div>
+            </div>
+            <div class="result-actions">
+                <button onclick="showAnswers()" class="review-btn">ดูเฉลย</button>
+                <button onclick="restartQuiz()" class="secondary-btn">ทำข้อสอบใหม่</button>
+            </div>
+        </div>
+
+        <div id="review-section" class="section hidden">
+            <h1>📝 เฉลยแบบทดสอบ</h1>
+            <div id="review-container">
+                <!-- รายการเฉลยจะถูกสร้างโดย JavaScript -->
+            </div>
+            <div class="result-actions review-actions">
+                <button onclick="backToResult()" class="review-btn">กลับไปหน้าผลลัพธ์</button>
+                <button onclick="restartQuiz()" class="secondary-btn">ทำข้อสอบใหม่</button>
+            </div>
+        </div>
+
+        <div id="loading" class="hidden">
+            <div class="spinner"></div>
+            <p>กำลังโหลด...</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="script.js"></script>
+</body>
+</html>
